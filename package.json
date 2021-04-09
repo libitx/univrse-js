@@ -1,0 +1,48 @@
+{
+  "name": "univrse",
+  "version": "0.1.0-beta.1",
+  "description": "A universal schema for serializing data objects, secured with signatures and encryption.",
+  "keywords": [
+    "bitcoin",
+    "bsv",
+    "cbor",
+    "cryptography",
+    "signatures",
+    "encryption"
+  ],
+  "author": "libitx",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/libitx/univrse-js",
+  "main": "dist/univrse.cjs.js",
+  "module": "src/index.js",
+  "unpkg": "dist/univrse.min.js",
+  "scripts": {
+    "build": "rm -rf dist/* && rollup -c rollup.config.js",
+    "test": "mocha \"test/**/*.test.js\" --require esm"
+  },
+  "dependencies": {
+    "base64url": "^3.0",
+    "borc": "^2.1.2",
+    "isomorphic-webcrypto": "^2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13",
+    "@babel/preset-env": "^7.13",
+    "@rollup/plugin-babel": "^5.3",
+    "@rollup/plugin-commonjs": "^18.0",
+    "@rollup/plugin-json": "^4.1",
+    "@rollup/plugin-node-resolve": "^11.2",
+    "bsv": "^2.0",
+    "chai": "^4.3",
+    "chai-as-promised": "^7.1",
+    "esm": "^3.2",
+    "mocha": "^8.3",
+    "rollup": "^2.44",
+    "rollup-plugin-banner": "^0.2",
+    "rollup-plugin-node-polyfills": "^0.2",
+    "rollup-plugin-terser": "^7.0"
+  },
+  "peerDependencies": {
+    "bsv": "^2.0"
+  }
+}
