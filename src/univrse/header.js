@@ -1,7 +1,7 @@
 /**
  * Header class
  * 
- * A Universe Header is simply an object of arbitrary key-value pairs. Headers
+ * A Univrse Header is simply an object of arbitrary key-value pairs. Headers
  * can be found in the Envelope, Signature and Recipient objects.
  * 
  * Known header parameters include:

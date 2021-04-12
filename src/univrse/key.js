@@ -8,7 +8,7 @@ import algs from './algs/index.js'
 /**
  * Key class
  * 
- * Universe Keys mirror the API of, and are compatible with, JSON JWK keys.
+ * Univrse Keys mirror the API of, and are compatible with, JSON JWK keys.
  */
 class Key {
   /**

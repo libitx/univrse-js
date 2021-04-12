@@ -3,7 +3,7 @@ import Header from './header.js'
 /**
  * Key class
  * 
- * A Universe Signature is a structure wrapping a set of headers and the raw
+ * A Univrse Signature is a structure wrapping a set of headers and the raw
  * signature.
  */
 class Signature {

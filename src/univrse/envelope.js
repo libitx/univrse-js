@@ -6,10 +6,12 @@ import Recipient from './recipient.js'
 import Signature from './signature.js'
 import algs from './algs/index.js'
 
+const UNIVRSE_PREFIX = 'UNIV'
+
 /**
  * Envelope class
  * 
- * A Universe Envelope is a structure containing a set of headers, a payload,
+ * A Univrse Envelope is a structure containing a set of headers, a payload,
  * and optionally one or more Signatures and Recipients.
  * 
  * An Envelope can be converted to a compact CBOR encoded buffer, a Base64
@@ -72,10 +74,17 @@ class Envelope {
    * @constructor
    */
   static fromScript(script) {
-    const i = script.chunks.findIndex(c => c.opCodeNum === 106)
-    const parts = script.chunks.slice(i+1).map(c => cbor.decode(c.buf))
+    const idx = script.chunks.findIndex((c, i, chunks) => {
+      return c.opCodeNum === 106 && chunks[i+1].buf
+        && chunks[i+1].buf.toString() === UNIVRSE_PREFIX
+    })
 
-    return this.fromArray(parts)
+    if (idx >= 0) {
+      const parts = script.chunks.slice(idx+2).map(c => cbor.decode(c.buf))
+      return this.fromArray(parts)
+    } else {
+      throw 'Invalid Univrse script'
+    }
   }
 
   /**
@@ -382,15 +391,17 @@ class Envelope {
    * @returns {String}
    */
   toScript(falseReturn = true) {
-    const chunks = [{ opCodeNum: OpCode.OP_RETURN }]
+    const script = new Script()
     if (falseReturn) {
-      chunks.unshift({ opCodeNum: OpCode.OP_FALSE })
+      script.writeOpCode(OpCode.OP_FALSE)
     }
+    script.writeOpCode(OpCode.OP_RETURN)
+    script.writeBuffer(Buffer.from(UNIVRSE_PREFIX))
 
     return this.toArray()
       .reduce((s, p) => {
         return s.writeBuffer(cbor.encode(p))
-      }, new Script(chunks))
+      }, script)
   }
 
   /**

@@ -5,7 +5,7 @@ import algs from './algs/index.js'
 /**
  * Recipient class
  * 
- * A Universe Recipient is a structure wrapping a set of headers and an optional
+ * A Univrse Recipient is a structure wrapping a set of headers and an optional
  * content encryption key.
  */
 class Recipient {
