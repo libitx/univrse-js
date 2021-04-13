@@ -49,9 +49,8 @@ describe('Envelope.fromScript()', () => {
   it('decodes the script to envelope instance', () => {
     const s1 = env1.toScript()
     const s2 = env2.toScript(false)
-    console.log(s1)
     assert.deepEqual(Envelope.fromScript(s1), env1)
-    //assert.deepEqual(Envelope.fromScript(s2), env2)
+    assert.deepEqual(Envelope.fromScript(s2), env2)
   })
 })
 

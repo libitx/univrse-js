@@ -118,7 +118,7 @@ function computeSharedSecret(privKey, pubKey) {
  */
 async function kdf(secret, alg, opts) {
   const { keylen } = params[alg]
-  const algBuf = Buffer.from('alg'),
+  const algBuf = Buffer.from(alg),
         apuBuf = Buffer.from(opts.apu ? opts.apu : ''),
         apvBuf = Buffer.from(opts.apv ? opts.apv : ''),
         keylenInt = Buffer.alloc(4),
@@ -126,7 +126,7 @@ async function kdf(secret, alg, opts) {
         apuInt = Buffer.alloc(4),
         apvInt = Buffer.alloc(4);
 
-  keylenInt.writeUInt32BE(keylen)
+  keylenInt.writeUInt32BE(keylen*8)
   algInt.writeUInt32BE(algBuf.length)
   apuInt.writeUInt32BE(apuBuf.length)
   apvInt.writeUInt32BE(apvBuf.length)
