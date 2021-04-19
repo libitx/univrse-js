@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { OpCode, Script } from 'bsv'
 import cbor from 'borc'
 import base64url from 'base64url'
