@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer'
 import { Ecdsa, Hash, KeyPair, Sig } from 'bsv'
-import { toPrivKey, toPubKey } from '../util'
+import { toBsvPrivKey, toBsvPubKey } from '../util'
 
 /**
  * ES256K module. Implements ECDSA signatures on the secp256k1 curve. Uses 65
@@ -19,7 +19,7 @@ import { toPrivKey, toPubKey } from '../util'
     assertKey(key, alg)
 
     const hashBuf = Hash.sha256(Buffer.from(msg))
-    const keyPair = KeyPair.fromPrivKey(toPrivKey(key))
+    const keyPair = KeyPair.fromPrivKey(toBsvPrivKey(key))
 
     const sig = new Ecdsa().fromObject({ hashBuf, keyPair })
       .sign()
@@ -45,7 +45,7 @@ import { toPrivKey, toPubKey } from '../util'
     const hashBuf = Hash.sha256(Buffer.from(msg))
     const sig = new Sig().fromCompact(Buffer.from(signature))
     const keyPair = new KeyPair()
-    keyPair.pubKey = toPubKey(key)
+    keyPair.pubKey = toBsvPubKey(key)
 
     const ecdsa = new Ecdsa().fromObject({ hashBuf, sig, keyPair })
     ecdsa.verify()

@@ -1,6 +1,7 @@
 import AES_CBC_HMAC from './aes_cbc_hmac'
 import AES_GCM from './aes_gcm'
 import ECDH_AES from './ecdh_aes'
+import ECIES_BIE1 from './ecies_bie1'
 import ES256K from './es256k'
 import ES256K_BSM from './es256k_bsm'
 import HMAC from './hmac'
@@ -15,6 +16,7 @@ const algs = {
   A256GCM: AES_GCM,
   'ECDH-ES+A128GCM': ECDH_AES,
   'ECDH-ES+A256GCM': ECDH_AES,
+  'ECIES-BIE1': ECIES_BIE1,
   ES256K,
   'ES256K-BSM': ES256K_BSM,
   HS256: HMAC,

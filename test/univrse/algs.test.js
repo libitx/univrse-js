@@ -75,6 +75,12 @@ describe('alg.encrypt() and alg.decrypt()', () => {
     const result = await algs.decrypt('ECDH-ES+A128GCM', encrypted, ecKey, { iv, tag, epk })
     assert.equal(result.toString(), 'Hello world!')
   })
+
+  it('encrypts and decrypts the message with the ECIES-BIE1 alg', async () => {
+    const {encrypted} = await algs.encrypt('ECIES-BIE1', 'Hello world!', ecKey)
+    const result = await algs.decrypt('ECIES-BIE1', encrypted, ecKey)
+    assert.equal(result.toString(), 'Hello world!')
+  })
 })
 
 
@@ -95,6 +101,15 @@ describe('alg.encrypt()', () => {
 
   it('xy123 throws error if key and alg mismatch', async () => {
     await assert.isRejected(algs.encrypt('A128CBC-HS256', 'Hello world!', oct128Key), 'Invalid key for A128CBC-HS256 algorithm')
+  })
+})
+
+
+describe('alg.decrypt()', () => {
+  it('decrypts a message from bsv.js using the ECIES-BIE1 alg', async () => {
+    const encrypted = Buffer.from('QklFMQMIQhsRI05VZZDvO74hMGv/0j8EmvmR22Zwn3dn5mnNcYLEgAXGdpwQIvX5/CmiCQZ3WvQFPFhDu+Nz2om8ta8vwaILdEnGInL+CpAykhlkDg==', 'base64')
+    const result = await algs.decrypt('ECIES-BIE1', encrypted, ecKey)
+    assert.equal(result.toString(), 'Hello world!')
   })
 })
 
