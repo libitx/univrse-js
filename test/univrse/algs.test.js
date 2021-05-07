@@ -30,6 +30,9 @@ const oct512Key = new Key('oct', {
 const es256kSig = Buffer.from([
   32, 16, 194, 9, 63, 13, 122, 78, 39, 16, 18, 139, 242, 58, 137, 10, 177, 213, 48, 68, 143, 4, 146, 67, 196, 237, 227, 211, 93, 214, 113, 101, 170, 98, 109,
   159, 12, 228, 57, 187, 236, 185, 163, 90, 135, 218, 62, 80, 208, 157, 5, 141, 228, 8, 215, 148, 101, 233, 242, 6, 62, 95, 8, 52, 198])
+const es256kBsmSig = Buffer.from([
+    31, 21, 105, 207, 133, 3, 239, 35, 126, 207, 145, 253, 69, 196, 64, 126, 140, 214, 235, 197, 237, 133, 56, 2, 43, 156, 56, 193, 201, 43, 180, 111, 24, 74,
+    56, 129, 250, 130, 242, 45, 205, 244, 46, 221, 152, 116, 149, 204, 30, 228, 57, 93, 114, 64, 20, 217, 76, 98, 173, 128, 106, 242, 233, 168, 146])
 const hs256Sig = Buffer.from([
     26, 61, 97, 208, 153, 53, 69, 235, 105, 51, 91, 10, 56, 62, 201, 79, 109, 174, 65, 171, 226, 37, 213, 101, 90, 172, 82, 13, 250, 134, 119, 91])
 const hs512Sig = Buffer.from([
@@ -102,6 +105,11 @@ describe('alg.sign()', () => {
     assert.deepEqual(sig, es256kSig)
   })
 
+  it('signs the message with the ES256K-BSM alg', async () => {
+    const sig = await algs.sign('ES256K-BSM', 'Hello world!', ecKey)
+    assert.deepEqual(sig, es256kBsmSig)
+  })
+
   it('signs the message with the HS256 alg', async () => {
     const sig = await algs.sign('HS256', 'Hello world!', oct256Key)
     assert.deepEqual(sig, hs256Sig)
@@ -125,6 +133,10 @@ describe('alg.sign()', () => {
 describe('alg.verify()', () => {
   it('verifies the message signed with the ES256K alg', async () => {
     await assert.becomes(algs.verify('ES256K', 'Hello world!', es256kSig, ecKey), true)
+  })
+
+  it('verifies the message signed with the ES256K-BSM alg', async () => {
+    await assert.becomes(algs.verify('ES256K-BSM', 'Hello world!', es256kBsmSig, ecKey), true)
   })
 
   it('verifies the message signed with the HS256 alg', async () => {
