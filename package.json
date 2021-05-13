@@ -17,7 +17,8 @@
   "module": "src/index.js",
   "unpkg": "dist/univrse.min.js",
   "scripts": {
-    "build": "rm -rf dist/* && rollup -c rollup.config.js",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "docs": "rimraf docs && jsdoc -c ./jsdoc.config.js",
     "test": "mocha \"test/**/*.test.js\" --require esm"
   },
   "dependencies": {
@@ -36,7 +37,9 @@
     "chai": "^4.3",
     "chai-as-promised": "^7.1",
     "esm": "^3.2",
+    "jsdoc": "^3.6.6",
     "mocha": "^8.3",
+    "rimraf": "^3.0.2",
     "rollup": "^2.44",
     "rollup-plugin-banner": "^0.2",
     "rollup-plugin-node-polyfills": "^0.2",

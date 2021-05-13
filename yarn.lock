@@ -329,6 +329,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/parser@npm:^7.9.4":
+  version: 7.14.2
+  resolution: "@babel/parser@npm:7.14.2"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 18dffc18a2c15f8877988c9b5a46c87f1763e8a383c3210c9b5b651955b1ac46dc54da27acc09acd7fb917f37e0bd92b8985dc4c9d7f1e750dfccbcea730aa0e
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:^7.13.12":
   version: 7.13.12
   resolution: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:7.13.12"
@@ -1460,6 +1469,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"argparse@npm:^1.0.7":
+  version: 1.0.10
+  resolution: "argparse@npm:1.0.10"
+  dependencies:
+    sprintf-js: ~1.0.2
+  checksum: 435adaef5f6671c3ef1478a22be6fd54bdb99fdbbce8f5561b9cbbb05068ccce87b7df3b9f3322ff52a6ebb9cab2b427cbedac47a07611690a9beaa5184093e2
+  languageName: node
+  linkType: hard
+
 "argparse@npm:^2.0.1":
   version: 2.0.1
   resolution: "argparse@npm:2.0.1"
@@ -1616,6 +1634,13 @@ __metadata:
     minimalistic-assert: ^1.0.0
     minimalistic-crypto-utils: ^1.0.0
   checksum: 65eb6ed729d33706c43d90593841ffa9e457fdb2b21eb4b9e45483d25ddbdb1ea897d693f32d1dddb30e7973cf30b50911d53e70ec05e1889b48581dfbd99d9c
+  languageName: node
+  linkType: hard
+
+"bluebird@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "bluebird@npm:3.7.2"
+  checksum: 4f2288662f3d4eadbb82d4daa4a7d7976a28fa3c7eb4102c9b4033b03e5be4574ba123ac52a7c103cde4cb7b2d2afc1dbe41817ca15a29ff21ecd258d0286047
   languageName: node
   linkType: hard
 
@@ -1785,6 +1810,15 @@ __metadata:
   version: 1.0.30001208
   resolution: "caniuse-lite@npm:1.0.30001208"
   checksum: c8c9ffbd57fe0f39e1cde2211b685f4a16babe73ab2bb50b22b9f267e29ca4843b5df83d518fae2c2e79347eab6d7da86027d649cb984e6f151a5650f592c03b
+  languageName: node
+  linkType: hard
+
+"catharsis@npm:^0.8.11":
+  version: 0.8.11
+  resolution: "catharsis@npm:0.8.11"
+  dependencies:
+    lodash: ^4.17.14
+  checksum: 0015c6e2607db95c120e26c83b2a291460d5e82dcf9aed20f2ad47a250307eb7ae2d9047ede295a9d560ba8126edb74debda6e068cc1044b4d97d2679541a14b
   languageName: node
   linkType: hard
 
@@ -2136,6 +2170,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"entities@npm:~2.0.0":
+  version: 2.0.3
+  resolution: "entities@npm:2.0.3"
+  checksum: 02dfe1fbf531dd667420ff4e963ddc049203471ba8ad2873655303aff4cf65f27823effb397521af4d58b5609d33fc0492b0cc073c8374f3bbe6d3b5bcec1a42
+  languageName: node
+  linkType: hard
+
 "env-paths@npm:^2.2.0":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
@@ -2168,6 +2209,13 @@ __metadata:
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: f9484b8b4c8827d816e0fd905c25ed4b561376a9c220e1430403ea84619bf680c76a883a48cff8b8e091daf55d6a497e37479f9787b9f15f3c421b6054289744
+  languageName: node
+  linkType: hard
+
+"escape-string-regexp@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "escape-string-regexp@npm:2.0.0"
+  checksum: f3500f264e864aef0c336a2efb3adb1cee9ba1abbe15d69f0d9dab423607cac91aa009b23011b4e6cfd6d6b79888873e21dad1882047aa2e1555dd307428c51d
   languageName: node
   linkType: hard
 
@@ -2362,7 +2410,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.2.6":
+"graceful-fs@npm:^4.1.9, graceful-fs@npm:^4.2.6":
   version: 4.2.6
   resolution: "graceful-fs@npm:4.2.6"
   checksum: 84d39c7756892553da990a9db7e45f844b3309b37b5a00174cbb4748476f2250c54f24594d4d252f64f085c65c2fdac7c809419bf6d55f0e6e42eb07ac0f5bf2
@@ -2740,6 +2788,39 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"js2xmlparser@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "js2xmlparser@npm:4.0.1"
+  dependencies:
+    xmlcreate: ^2.0.3
+  checksum: e3effb5d9a7af40682e775bca592ed0c0bdd71ed21f63887e24a9d33265ee50d7c2207d85f73ea571054c7346b414d4f5f21a99a318c5269ddb72ea022e3a83c
+  languageName: node
+  linkType: hard
+
+"jsdoc@npm:^3.6.6":
+  version: 3.6.6
+  resolution: "jsdoc@npm:3.6.6"
+  dependencies:
+    "@babel/parser": ^7.9.4
+    bluebird: ^3.7.2
+    catharsis: ^0.8.11
+    escape-string-regexp: ^2.0.0
+    js2xmlparser: ^4.0.1
+    klaw: ^3.0.0
+    markdown-it: ^10.0.0
+    markdown-it-anchor: ^5.2.7
+    marked: ^0.8.2
+    mkdirp: ^1.0.4
+    requizzle: ^0.2.3
+    strip-json-comments: ^3.1.0
+    taffydb: 2.6.2
+    underscore: ~1.10.2
+  bin:
+    jsdoc: jsdoc.js
+  checksum: 4090fa6774dca00ff724f05d45eaade9e3922e968b9e2100268c519fe8b5b7baf993a217fd966b668e733aa764bd951d8d49a4164ea468dab2cf196b5670ebae
+  languageName: node
+  linkType: hard
+
 "jsesc@npm:^2.5.1":
   version: 2.5.2
   resolution: "jsesc@npm:2.5.2"
@@ -2775,6 +2856,24 @@ fsevents@~2.3.1:
   bin:
     json5: lib/cli.js
   checksum: 07b1f90c2801dc52df2b0ac8d606cc400a85cda79130e754780fa2ab9805d0fb85a0e61b6a5cdd68e88e5d0c8f9109ec415af08283175556cdccaa8563853908
+  languageName: node
+  linkType: hard
+
+"klaw@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "klaw@npm:3.0.0"
+  dependencies:
+    graceful-fs: ^4.1.9
+  checksum: 3955ffedd758c4e684f002599019c4627ccf24c1db70e7c781512ae2709afd04ea2c169cd2d7d5ee2d960274d264cb565d1ce5d98cb4811d2ac665c77daa2bd2
+  languageName: node
+  linkType: hard
+
+"linkify-it@npm:^2.0.0":
+  version: 2.2.0
+  resolution: "linkify-it@npm:2.2.0"
+  dependencies:
+    uc.micro: ^1.0.1
+  checksum: 7905b34078d1fd85d4310c5c5381164cbdf781835e0cb5ac73d13ff14d0c87347e02655bdff5cec63631949a3b586c5f8e1e81ee0ce62ae799df58178748eb3e
   languageName: node
   linkType: hard
 
@@ -2820,7 +2919,7 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.19, lodash@npm:^4.5.0":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.19, lodash@npm:^4.5.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 4983720b9abca930a4a46f18db163d7dad8dd00dbed6db0cc7b499b33b717cce69f80928b27bbb1ff2cbd3b19d251ee90669a8b5ea466072ca81c2ebe91e7468
@@ -2888,6 +2987,39 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
+"markdown-it-anchor@npm:^5.2.7":
+  version: 5.3.0
+  resolution: "markdown-it-anchor@npm:5.3.0"
+  peerDependencies:
+    markdown-it: "*"
+  checksum: 505fbaa1252e47596a98b44220d8b24092df010d294d9bc309e6e9b1a67840cbe3661c6004d2db813b4cd6d6cd3abdf9eb70d45401a8972f0177bddf29fc32cf
+  languageName: node
+  linkType: hard
+
+"markdown-it@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "markdown-it@npm:10.0.0"
+  dependencies:
+    argparse: ^1.0.7
+    entities: ~2.0.0
+    linkify-it: ^2.0.0
+    mdurl: ^1.0.1
+    uc.micro: ^1.0.5
+  bin:
+    markdown-it: bin/markdown-it.js
+  checksum: f0529067445a432fa5b32b6544e1aaa21d0ee54d43f28a3fb4d6afab271e17c749481da936529bb72a5544146cdd541757893c27f6b0ff8d45339b5cf3f98be5
+  languageName: node
+  linkType: hard
+
+"marked@npm:^0.8.2":
+  version: 0.8.2
+  resolution: "marked@npm:0.8.2"
+  bin:
+    marked: bin/marked
+  checksum: 49148dd7898fcd7215458a6ba5dec895a8343f2823c12da527dd40b29ed71c5235cba06a19833cc61e138811fa459484550a69ad89aa42af9f6e87b9dad19b7d
+  languageName: node
+  linkType: hard
+
 "md5.js@npm:^1.3.4":
   version: 1.3.5
   resolution: "md5.js@npm:1.3.5"
@@ -2896,6 +3028,13 @@ fsevents@~2.3.1:
     inherits: ^2.0.1
     safe-buffer: ^5.1.2
   checksum: ca0b260ea29746f1017ad16bc0e164299ae453d2d6a24d635cc6ec03e280f350b09faa4899bfed9387c81457ca55981e9a684336d89faa94b1d2a01903fae2ec
+  languageName: node
+  linkType: hard
+
+"mdurl@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "mdurl@npm:1.0.1"
+  checksum: ed5e81efed218ca1cb61bbb5c41857c98ce456382d630a2f45a1b050087a10119a24107ca1acd4ccef2f1a17b02b8d61fb3c630d3d7c0f22df906dbdd2e5f7b5
   languageName: node
   linkType: hard
 
@@ -3421,6 +3560,15 @@ pvutils@latest:
   languageName: node
   linkType: hard
 
+"requizzle@npm:^0.2.3":
+  version: 0.2.3
+  resolution: "requizzle@npm:0.2.3"
+  dependencies:
+    lodash: ^4.17.14
+  checksum: 8fbefe46b9f4df078c601d22f65ed1cb4ab77f80cdf04ae4dc66cb7405f7902d11ab00b3e747610d07351bc43c88484d538e41aaa213fe6ce3fc1977977228f8
+  languageName: node
+  linkType: hard
+
 "resolve@^1.14.2, resolve@^1.17.0, resolve@^1.19.0":
   version: 1.20.0
   resolution: "resolve@npm:1.20.0"
@@ -3695,6 +3843,13 @@ pvutils@latest:
   languageName: node
   linkType: hard
 
+"sprintf-js@npm:~1.0.2":
+  version: 1.0.3
+  resolution: "sprintf-js@npm:1.0.3"
+  checksum: 51df1bce9e577287f56822d79ac5bd94f6c634fccf193895f2a1d2db2e975b6aa7bc97afae9cf11d49b7c37fe4afc188ff5c4878be91f2c86eabd11c5df8b62c
+  languageName: node
+  linkType: hard
+
 "ssri@npm:^8.0.0, ssri@npm:^8.0.1":
   version: 8.0.1
   resolution: "ssri@npm:8.0.1"
@@ -3788,7 +3943,7 @@ pvutils@latest:
   languageName: node
   linkType: hard
 
-"strip-json-comments@npm:3.1.1":
+"strip-json-comments@npm:3.1.1, strip-json-comments@npm:^3.1.0":
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: f16719ce25abc58a55ef82b1c27f541dcfa5d544f17158f62d10be21ff9bd22fde45a53c592b29d80ad3c97ccb67b7451c4833913fdaeadb508a40f5e0a9c206
@@ -3819,6 +3974,13 @@ pvutils@latest:
   dependencies:
     has-flag: ^4.0.0
   checksum: 8e57067c39216f3c2ffce7cc14ca934d54746192571203aa9c9922d97d2d55cc1bdaa9e41a11f91e620670b5a74ebdec6b548a885d8cc2dea7cab59e21416029
+  languageName: node
+  linkType: hard
+
+"taffydb@npm:2.6.2":
+  version: 2.6.2
+  resolution: "taffydb@npm:2.6.2"
+  checksum: 7eb82cdec4142f2ebef08bb9ae3df28272d2a7d60f5bc1cb1b2a2d47d429a356803aa4a2fc97f75f5a2336c668b32c66c06c373b90ae8598b4cec201f9e87270
   languageName: node
   linkType: hard
 
@@ -3876,6 +4038,20 @@ pvutils@latest:
   version: 4.0.8
   resolution: "type-detect@npm:4.0.8"
   checksum: e01dc6ac9098192a7859fb86c7b4073709a4e13a5cc02c54d54412378bb099563fda7a7a85640f33e3a7c2e8189182eb1511f263e67f402b2d63fe81afdde785
+  languageName: node
+  linkType: hard
+
+"uc.micro@npm:^1.0.1, uc.micro@npm:^1.0.5":
+  version: 1.0.6
+  resolution: "uc.micro@npm:1.0.6"
+  checksum: 9dfe5ad0a08059c3eb6ded70b7cfb6fdcb5908b385af9d4717cee7f140571f5c2bb89405093ace07cfd0e283f409495d2feafd321b4b703c1fa3014e129dab27
+  languageName: node
+  linkType: hard
+
+"underscore@npm:~1.10.2":
+  version: 1.10.2
+  resolution: "underscore@npm:1.10.2"
+  checksum: d49b87c03d50a431f8ca146b99be29ce47e0e08057aff58da063d7bdc30c41f9b2ade695a0ec5eab903ba1423dd16319391e953c5464aefcb482d3955766bd94
   languageName: node
   linkType: hard
 
@@ -3945,7 +4121,9 @@ pvutils@latest:
     chai-as-promised: ^7.1
     esm: ^3.2
     isomorphic-webcrypto: ^2.3
+    jsdoc: ^3.6.6
     mocha: ^8.3
+    rimraf: ^3.0.2
     rollup: ^2.44
     rollup-plugin-banner: ^0.2
     rollup-plugin-node-polyfills: ^0.2
@@ -4024,6 +4202,13 @@ pvutils@latest:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 519fcda0fcdf0c16327be2de9d98646742307bc830277e8868529fcf7566f2b330a6453c233e0cdcb767d5838dd61a90984a02ecc983bcddebea5ad0833bbf98
+  languageName: node
+  linkType: hard
+
+"xmlcreate@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "xmlcreate@npm:2.0.3"
+  checksum: 90e1a52e24bade938869e4bcca030cf719774693b87659ba877452b0acfeb08c734899ee6c462fb4ce2fbe4d00d9736fd1a182c726281b59fd63dc5e4dcce6c2
   languageName: node
   linkType: hard
 

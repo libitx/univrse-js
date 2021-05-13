@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: algs/ecies_bie1.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: algs/ecies_bie1.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Buffer } from 'buffer'
+import { Bn, Point, PubKey } from 'bsv'
+import crypto from 'isomorphic-webcrypto'
+import Key from '../key'
+import { fromBsvPubKey } from '../util'
+
+
+/**
+ * ECIES_BIE1 module. Implements Electrum-flavoured ECIES encryption and
+ * decryption.
+ */
+const ECIES_BIE1 = {
+  /**
+   * Decrypts the cyphertext with the key using the specified algorithm.
+   * 
+   * Accepted options:
+   * 
+   * * `epk` - Ephemeral public key
+   * * `apu` - Agreement PartyUInfo
+   * * `apv` - Agreement PartyVInfo
+   * * Any accepted AES_GCM options
+   * 
+   * @param {String} alg
+   * @param {Buffer} encrypted
+   * @param {Key} key
+   * @param {Object} opts
+   * @returns {Buffer}
+   */
+  async decrypt(alg, encrypted, key, opts = {}) {
+    assertKey(key, alg)
+
+    const len = encrypted.length - 69,
+          prefix = encrypted.slice(0, 4),
+          ephemeralPubKeyBuf = encrypted.slice(4, 4 + 33),
+          cipher = encrypted.slice(4 + 33, 4 + 33 + len),
+          mac = encrypted.slice(4 + 33 + len);
+
+    if (prefix.toString() !== 'BIE1') throw 'invalid magic bytes';
+
+    // Derive ECDH key and sha512 hash
+    const ephemeralPubKey = fromBsvPubKey(PubKey.fromDer(ephemeralPubKeyBuf))
+    const keyHash = await crypto.subtle.digest('SHA-512', computeSharedSecret(key, ephemeralPubKey))
+
+    // iv and keyE used in AES, keyM used in HMAC
+    const iv = keyHash.slice(0, 16),
+          keyE = keyHash.slice(16, 32),
+          keyM = keyHash.slice(32);
+
+    // HMAC validation
+    const macKey = await crypto.subtle.importKey('raw', keyM, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify'])
+    const verified = await crypto.subtle.verify({ name: 'HMAC' }, macKey, mac, encrypted.slice(0, -32))
+    if (!verified) throw 'mac validation failed';
+
+    // Decrypt cyphertext
+    const encKey = await crypto.subtle.importKey('raw', keyE, 'AES-CBC', false, ['decrypt'])
+    const result = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, encKey, cipher)
+    return Buffer.from(result)
+  },
+
+  /**
+   * Encrypts the message with the key using the specified algorithm. Returns
+   * an object containing the encrypted cyphertext and any headers to add to
+   * the Recipient.
+   * 
+   * @param {String} alg
+   * @param {Buffer|String} msg
+   * @param {Key} key
+   * @param {Object} opts
+   * @returns {Object}
+   */
+  async encrypt(alg, msg, key, _opts = {}) {
+    assertKey(key, alg)
+
+    // Derive ECDH key and sha512 hash
+    const ephemeralKey = await Key.generate('ec', 'secp256k1')
+    const keyHash = await crypto.subtle.digest('SHA-512', computeSharedSecret(ephemeralKey, key))
+
+    // iv and keyE used in AES, keyM used in HMAC
+    const iv = keyHash.slice(0, 16),
+          keyE = keyHash.slice(16, 32),
+          keyM = keyHash.slice(32);
+    
+    // Create ciphertext
+    const encKey = await crypto.subtle.importKey('raw', keyE, 'AES-CBC', false, ['encrypt'])
+    const cipher = await crypto.subtle.encrypt({ name: 'AES-CBC', iv }, encKey, Buffer.from(msg))
+    
+    // Concat encrypted data with hmac
+    const macKey = await crypto.subtle.importKey('raw', keyM, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+    const macData = Buffer.concat([
+      Buffer.from('BIE1'),
+      pubKeyBuf(ephemeralKey),
+      Buffer.from(cipher)
+    ])
+    const mac = await crypto.subtle.sign({ name: 'HMAC' }, macKey, macData)
+
+    return {
+      encrypted: Buffer.concat([macData, Buffer.from(mac)])
+    }
+  }
+}
+
+/**
+ * Asserts the key is valid.
+ * 
+ * @param {Key} key 
+ * @param {String} alg
+ */
+function assertKey(key, _alg) {
+  if (key.type !== 'EC' || key.params.crv !== 'secp256k1') {
+    throw `Invalid key for ECIES-BIE1 algorithm`
+  }
+}
+
+/**
+ * Computes and returns a ECDH shared secret from the given keys.
+ * 
+ * @param {Key} privKey
+ * @param {Key} pubKey
+ * @returns {Buffer}
+ */
+function computeSharedSecret(privKey, pubKey) {
+  const x = Bn.fromBuffer(pubKey.params.x),
+        y = Bn.fromBuffer(pubKey.params.y),
+        d = Bn.fromBuffer(privKey.params.d),
+        p = new Point(x, y),
+        s = p.mul(d);
+
+  return Buffer.concat([
+    Buffer.from([s.y.isOdd() ? 0x03 : 0x02]),
+    Buffer.from(s.x.toArray('big', 32))
+  ])
+}
+
+/**
+ * Converts a Key to a Buffer
+ * 
+ * @param {Key} key
+ * @returns {Buffer}
+ */
+function pubKeyBuf(key) {
+  const x = Bn.fromBuffer(key.params.x),
+        y = Bn.fromBuffer(key.params.y),
+        p = new Point(x, y),
+        pubKey = new PubKey(p);
+
+  return pubKey.toBuffer()
+}
+
+export default ECIES_BIE1</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Envelope.html">Envelope</a></li><li><a href="Envelope.fromArray.html">fromArray</a></li><li><a href="Envelope.fromBuffer.html">fromBuffer</a></li><li><a href="Envelope.fromScript.html">fromScript</a></li><li><a href="Envelope.fromString.html">fromString</a></li><li><a href="Envelope.wrap.html">wrap</a></li><li><a href="Header.html">Header</a></li><li><a href="Header.wrap.html">wrap</a></li><li><a href="Key.html">Key</a></li><li><a href="Key.decode.html">decode</a></li><li><a href="Key.generate.html">generate</a></li><li><a href="Recipient.html">Recipient</a></li><li><a href="Recipient.fromArray.html">fromArray</a></li><li><a href="Recipient.wrap.html">wrap</a></li><li><a href="Signature.html">Signature</a></li><li><a href="Signature.fromArray.html">fromArray</a></li><li><a href="Signature.wrap.html">wrap</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AES_CBC_HMAC">AES_CBC_HMAC</a></li><li><a href="global.html#AES_GCM">AES_GCM</a></li><li><a href="global.html#algs">algs</a></li><li><a href="global.html#assertKey">assertKey</a></li><li><a href="global.html#computeSharedSecret">computeSharedSecret</a></li><li><a href="global.html#createMacMessage">createMacMessage</a></li><li><a href="global.html#ECDH_AES">ECDH_AES</a></li><li><a href="global.html#ECIES_BIE1">ECIES_BIE1</a></li><li><a href="global.html#ES256K">ES256K</a></li><li><a href="global.html#ES256K_BSM">ES256K_BSM</a></li><li><a href="global.html#fromBsvPrivKey">fromBsvPrivKey</a></li><li><a href="global.html#fromBsvPubKey">fromBsvPubKey</a></li><li><a href="global.html#HMAC">HMAC</a></li><li><a href="global.html#kdf">kdf</a></li><li><a href="global.html#mergeKeyHeaders">mergeKeyHeaders</a></li><li><a href="global.html#messageDigest">messageDigest</a></li><li><a href="global.html#params">params</a></li><li><a href="global.html#pubKeyBuf">pubKeyBuf</a></li><li><a href="global.html#splitKey">splitKey</a></li><li><a href="global.html#toBsvPrivKey">toBsvPrivKey</a></li><li><a href="global.html#toBsvPubKey">toBsvPubKey</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

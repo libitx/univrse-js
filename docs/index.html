@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Univrse.js</h1>
+<p><img src="https://img.shields.io/npm/v/univrse?color=informational" alt="npm">
+<img src="https://img.shields.io/github/license/libitx/univrse-js?color=informational" alt="License">
+<img src="https://img.shields.io/github/workflow/status/libitx/univrse-js/Node.js%20CI" alt="Build Status"></p>
+<p>Universal schema for data serialisation, signing and encryption.</p>
+<ul>
+<li><strong>Serialising data</strong> - Simple, binary-friendly data exchange using the Concise Binary Object Representation (CBOR) data format.</li>
+<li><strong>Authenticating data</strong> - Protect integrity of data with digital signatures or message authentication code (MAC) algorithms.</li>
+<li><strong>Securing data</strong> - Ensure confidentiality and integrity of data for one or multiple recipients, using standardised authenticated encryption algorithms.</li>
+</ul>
+<h2>Installation</h2>
+<p>Install Univrse with npm or yarn:</p>
+<pre class="prettyprint source lang-shell"><code>npm install univrse
+# or
+yarn add univrse
+</code></pre>
+<p>Alternatively use in a browser via CDN:</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;//unpkg.com/univrse/dist/univrse.min.js&quot;>&lt;/script>
+</code></pre>
+<p>Univrse has a peer dependency on version 2 the bsv library which must also be installed in your project.</p>
+<h2>Usage</h2>
+<p>For full documentation, please refer to:</p>
+<ul>
+<li><a href="https://univrse.network/docs">univrse.network docs</a></li>
+<li><a href="#todo">univrse.js API docs</a></li>
+</ul>
+<h3>Serialising data</h3>
+<p>Any arbitrary payload can be wrapped in an <code>Envelope</code> structure, and then encoded in one of three serialisation formats:</p>
+<ul>
+<li><code>Envelope#toBuffer()</code> - Concise CBOR-encoded binary value</li>
+<li><code>Envelope#toString()</code> - Compact Base64-url encoded string value</li>
+<li><code>Envelope#toScript()</code> - Encoded in a Bitcoin <code>OP_RETURN</code> script</li>
+</ul>
+<pre class="prettyprint source lang-javascript"><code>import { Envelope } from 'univrse'
+
+// Wrap any arbitrary data payload in an Envelope structure
+const payload = 'Hello world!'
+const env1 = Envelope.wrap(payload, { proto: 'univrse.demo' })
+
+// Encode the data in one of three serialisation formats
+const envBuffer = env1.toBuffer()
+const envString = env1.toString()
+const envScript = env1.toScript()
+
+// Decode the serialised data back into an Envelope structure
+const env2 = Envelope.fromBuffer(envBuffer)
+const env3 = Envelope.fromString(envString)
+const env4 = Envelope.fromScript(envScript)
+
+// Compare payload
+console.log(env2.payload === payload, env3.payload === payload, env4.payload === payload)
+// => true, true, true
+</code></pre>
+<h3>Using signatures</h3>
+<p>Digital signatures or message authentication code (MAC) algorithms can be used to protect the integrity of an Envelope's data payload.</p>
+<pre class="prettyprint source lang-javascript"><code>import { Envelope, Key } from 'univrse'
+
+// Generate keys
+const aliceKey = await Key.generate('ec', 'secp256k1')
+const alicePubKey = aliceKey.toPublic()
+const appSecret = await Key.generate('oct', 256)
+
+// Sign and verify using a single key
+const env1 = Envelope.wrap('Hello world!', { proto: 'univrse.demo' })
+await env1.sign(aliceKey, { alg: 'ES256K', kid: 'alice' })
+const v1 = await env1.verify(alicePub)
+console.log(v1)
+// => true
+
+// Sign and verify using multiple keys and algorithms
+const env2 = Envelope.wrap('Hello world!', { proto: 'univrse.demo' })
+await env2.sign([
+  [aliceKey, { alg: 'ES256K', kid: 'alice' }],
+  [appSecret, { alg: 'HS256', kid: 'app' }]
+])
+const v2 = await env2.verify([alicePub, appSecret])
+console.log(v2)
+// => true
+</code></pre>
+<h3>Using encryption</h3>
+<p>Authenticated encryption algorithms may be used to ensure the confidentiality of an Envelope's data payload for one or multiple recipients.</p>
+<pre class="prettyprint source lang-javascript"><code>import { Envelope, Key } from 'univrse'
+
+// Generate keys
+const bobKey = await Key.generate('ec', 'secp256k1')
+const bobPubKey = bobKey.toPublic()
+const charlieKey = await Key.generate('ec', 'secp256k1')
+const charliePubKey = bobKey.toPublic()
+const appSecret = await Key.generate('oct', 256)
+
+// Encrypt and decrypt data for a single recipient
+const env1 = Envelope.wrap('Hello world!', { proto: 'univrse.demo' })
+await env1.encrypt(bobPubKey, { alg: 'ECDH-ES+A128GCM', kid: 'bob' })
+await env1.decrypt(bobKey)
+console.log(env1.payload)
+// => &quot;Hello world!&quot;
+
+// Encrypt and decrypt data for multiple recipients using multiple algorithms
+const env2 = Envelope.wrap('Hello world!', { proto: 'univrse.demo' })
+await env2.encrypt([
+  [appSecret, { alg: 'A256GCM' }],
+  [bobPubKey, { alg: 'ECDH-ES+A128GCM', kid: 'bob' }],
+  [bobPubKey, { alg: 'ECIES-BIE1', kid: 'charlie' }]
+])
+
+const bobEnv = Envelope.fromBuffer(env2.toBuffer())
+await bobEnv.decryptAt(1, bobKey)
+console.log(bobEnv.payload)
+// => &quot;Hello world!&quot;
+
+const charlieEnv = Envelope.fromBuffer(env2.toBuffer())
+await charlieEnv.decryptAt(2, charlieKey)
+console.log(charlieEnv.payload)
+// => &quot;Hello world!&quot;
+</code></pre>
+<h3>Working with <code>bsv</code> keys</h3>
+<p>The <code>util</code> module provides a number of helper functions to convert to and from <code>bsv</code> keys.</p>
+<pre class="prettyprint source lang-javascript"><code>import { KeyPair } from 'bsv'
+import { Key, util } from 'univrse'
+
+// Convert bsv KeyPair to Univrse keys
+const keyPair = KeyPair.fromRandom()
+const keyFromPrivKey = util.fromBsvPrivKey(keyPair.privKey)
+const keyFromPubKey = util.fromBsvPubKey(keyPair.pubKey)
+
+// Convert Univrse key to bsv keys
+const key = await Key.generate('ec', 'secp256k1')
+const privKey = util.toBsvPrivKey(key)
+const pubKey = util.toBsvPubKey(key)
+</code></pre>
+<h2>License</h2>
+<p>Univrse is open source and released under the <a href="https://github.com/libitx/univrse-js/blob/master/LICENSE">Apache-2 License</a>.</p>
+<p>Copyright (c) 2021 Chronos Labs Ltd.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Envelope.html">Envelope</a></li><li><a href="Envelope.fromArray.html">fromArray</a></li><li><a href="Envelope.fromBuffer.html">fromBuffer</a></li><li><a href="Envelope.fromScript.html">fromScript</a></li><li><a href="Envelope.fromString.html">fromString</a></li><li><a href="Envelope.wrap.html">wrap</a></li><li><a href="Header.html">Header</a></li><li><a href="Header.wrap.html">wrap</a></li><li><a href="Key.html">Key</a></li><li><a href="Key.decode.html">decode</a></li><li><a href="Key.generate.html">generate</a></li><li><a href="Recipient.html">Recipient</a></li><li><a href="Recipient.fromArray.html">fromArray</a></li><li><a href="Recipient.wrap.html">wrap</a></li><li><a href="Signature.html">Signature</a></li><li><a href="Signature.fromArray.html">fromArray</a></li><li><a href="Signature.wrap.html">wrap</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AES_CBC_HMAC">AES_CBC_HMAC</a></li><li><a href="global.html#AES_GCM">AES_GCM</a></li><li><a href="global.html#algs">algs</a></li><li><a href="global.html#assertKey">assertKey</a></li><li><a href="global.html#computeSharedSecret">computeSharedSecret</a></li><li><a href="global.html#createMacMessage">createMacMessage</a></li><li><a href="global.html#ECDH_AES">ECDH_AES</a></li><li><a href="global.html#ECIES_BIE1">ECIES_BIE1</a></li><li><a href="global.html#ES256K">ES256K</a></li><li><a href="global.html#ES256K_BSM">ES256K_BSM</a></li><li><a href="global.html#fromBsvPrivKey">fromBsvPrivKey</a></li><li><a href="global.html#fromBsvPubKey">fromBsvPubKey</a></li><li><a href="global.html#HMAC">HMAC</a></li><li><a href="global.html#kdf">kdf</a></li><li><a href="global.html#mergeKeyHeaders">mergeKeyHeaders</a></li><li><a href="global.html#messageDigest">messageDigest</a></li><li><a href="global.html#params">params</a></li><li><a href="global.html#pubKeyBuf">pubKeyBuf</a></li><li><a href="global.html#splitKey">splitKey</a></li><li><a href="global.html#toBsvPrivKey">toBsvPrivKey</a></li><li><a href="global.html#toBsvPubKey">toBsvPubKey</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
