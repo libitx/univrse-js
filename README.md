@@ -1,5 +1,7 @@
 # Univrse.js
 
+![Univrse](https://github.com/libitx/univrse-js/raw/master/media/poster.png)
+
 ![npm](https://img.shields.io/npm/v/univrse?color=informational)
 ![License](https://img.shields.io/github/license/libitx/univrse-js?color=informational)
 ![Build Status](https://img.shields.io/github/workflow/status/libitx/univrse-js/Node.js%20CI)
@@ -33,7 +35,7 @@ Univrse has a peer dependency on version 2 the bsv library which must also be in
 For full documentation, please refer to:
 
 * [univrse.network docs](https://univrse.network/docs)
-* [univrse.js API docs](#todo)
+* [univrse.js API docs](https://libitx.github.io/univrse-js/)
 
 ### Serialising data
 
