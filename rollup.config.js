@@ -15,7 +15,7 @@ export default [
       // 1. Full browser build
       {
         file: 'dist/univrse.js',
-        format: 'iife',
+        format: 'umd',
         name: 'Univrse',
         globals: {
           bsv: 'bsvjs',
@@ -36,7 +36,17 @@ export default [
             keep_classnames: true
           })
         ]
-      }
+      },
+      // 3. ESM module build
+      {
+        file: 'dist/univrse.esm.js',
+        format: 'es',
+        name: 'Univrse',
+        globals: {
+          bsv: 'bsvjs',
+          'isomorphic-webcrypto': 'crypto'
+        }
+      },
     ],
     external: ['bsv', 'isomorphic-webcrypto'],
     plugins: [

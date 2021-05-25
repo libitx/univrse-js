@@ -1,6 +1,6 @@
 {
   "name": "univrse",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A universal schema for serializing data objects, secured with signatures and encryption.",
   "keywords": [
     "bitcoin",
@@ -14,7 +14,8 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/libitx/univrse-js",
   "main": "dist/univrse.cjs.js",
-  "module": "src/index.js",
+  "browser": "dist/univrse.js",
+  "module": "src/index.esm.js",
   "unpkg": "dist/univrse.min.js",
   "scripts": {
     "build": "rimraf dist && rollup -c rollup.config.js",
