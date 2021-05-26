@@ -20,7 +20,7 @@ import Key from './key.js'
  */
 export function fromBsvPrivKey(privKey) {
   const { pubKey } = KeyPair.fromPrivKey(privKey)
-  return new this('EC', {
+  return new Key('EC', {
     crv: 'secp256k1',
     d: Buffer.from(privKey.bn.toArray('big', 32)),
     x: Buffer.from(pubKey.point.x.toArray('big', 32)),
