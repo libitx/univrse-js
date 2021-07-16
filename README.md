@@ -12,6 +12,19 @@ Universal schema for data serialisation, signing and encryption.
 * **Authenticating data** - Protect integrity of data with digital signatures or message authentication code (MAC) algorithms.
 * **Securing data** - Ensure confidentiality and integrity of data for one or multiple recipients, using standardised authenticated encryption algorithms.
 
+## Sponsors
+
+<p align="center">Supported by:</p>
+<p align="center">
+  <a href="https://coingeek.com" target="_blank" rel="noopener noreferrer">
+    <img src="https://www.chronoslabs.net/img/badges/coingeek.png" width="180" alt="Coingeek">
+  </a>
+</p>
+
+Your sponsorship will help us continue to release and maintain software that Bitcoin businesses and developers depend on.
+
+#### 👉 [Sponsor Chronos Labs' open source work](https://www.chronoslabs.net/sponsor/)
+
 ## Installation
 
 Install Univrse with npm or yarn:
