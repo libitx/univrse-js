@@ -17,6 +17,7 @@
   "browser": "dist/univrse.js",
   "module": "src/index.esm.js",
   "unpkg": "dist/univrse.min.js",
+  "types": "univrse.d.ts",
   "scripts": {
     "build": "rimraf dist && rollup -c rollup.config.js",
     "docs": "rimraf docs && jsdoc -c ./jsdoc.config.js",
