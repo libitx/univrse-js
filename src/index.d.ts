@@ -4,8 +4,9 @@ type BsvScript = any;
 type CborData = Buffer;
 type CborEnvelope = CborData;
 type CborKey = CborData;
+type B64Envelope = string;
 
-export interface EncryptionOptions {
+interface EncryptionOptions {
   aad?: Buffer | string;
   apu?: Buffer | string;
   apv?: Buffer | string;
@@ -14,23 +15,21 @@ export interface EncryptionOptions {
   tag?: Buffer;
 }
 
-export interface EnvelopeParams {
-  header?: RawHeaders;
+interface EnvelopeParams {
+  headers?: RawHeaders;
   payload?: any;
   signature?: Signature | Signature[];
   recipient?: Recipient | Recipient[];
 }
 
-export type EnvelopeTuple = [
+type EnvelopeTuple = [
   header: RawHeaders,
   payload: any,
   signature?: Signature | Signature[],
   recipient?: Recipient | Recipient[],
 ]
 
-type EnvelopeString = string;
-
-export class Envelope {
+declare class Envelope {
   header: Header;
   payload: any;
   signature?: Signature | Signature[];
@@ -40,7 +39,7 @@ export class Envelope {
   static fromArray(parts: EnvelopeTuple): Envelope;
   static fromBuffer(buffer: CborEnvelope): Envelope;
   static fromScript(script: BsvScript): Envelope;
-  static fromString(str: EnvelopeString): Envelope;
+  static fromString(str: B64Envelope): Envelope;
   static wrap(payload: any, headers?: RawHeaders): Envelope;
 
   get encodedPayload(): CborData;
@@ -49,18 +48,18 @@ export class Envelope {
   decrypt(key: Key, opts?: EncryptionOptions): Promise<this>;
   decryptAt(i: number, key: Key, opts?: EncryptionOptions): Promise<this>;
   decryptAt(i: number, key: Key, opts?: EncryptionOptions): Promise<this>;
-  encrypt(key: Key, headers: RawHeaders, opts?: EncryptionOptions): Promise<this>;
+  encrypt(key: Key | KeyList, headers?: RawHeaders, opts?: EncryptionOptions): Promise<this>;
   pushRecipient(recipient: Recipient | Recipient[]): this;
   pushSignature(signature: Signature | Signature[]): this;
-  sign(key: Key, headers?: RawHeaders): Promise<this>;
+  sign(key: Key | KeyList, headers?: RawHeaders): Promise<this>;
   toArray(): EnvelopeTuple;
   toBuffer(): CborEnvelope;
   toScript(): BsvScript;
-  toString(): EnvelopeString;
+  toString(): B64Envelope;
   verify(key: Key, i?: number): Promise<boolean>;
 }
 
-export interface RawHeaders {
+interface RawHeaders {
   alg?: string;
   crit?: string;
   cty?: string;
@@ -68,10 +67,10 @@ export interface RawHeaders {
   kid?: string;
   proto?: string;
   zip?: string;
-  [key: string]: string;
+  [key: string]: any;
 }
 
-export class Header {
+declare class Header {
   headers: RawHeaders;
 
   constructor(headers: RawHeaders);
@@ -79,55 +78,55 @@ export class Header {
   unwrap(): RawHeaders;
 }
 
-export type KeyType = 'ec' | 'oct';
+type KeyType = 'ec' | 'oct';
 
-export interface EcKeyParams {
+interface EcKeyParams {
   crv: string;
   d: Buffer;
   x: Buffer;
   y: Buffer;
 }
-
-export interface EcKeyObject extends EcKeyParams {
-  kty: 'ec';
-}
-
-export interface OctKeyParams {
+interface OctKeyParams {
   k: Buffer;
 }
 
-export interface OctKeyObject extends OctKeyParams {
-  kty: 'oct';
-}
+type KeyParams = EcKeyParams | OctKeyParams;
 
-export type KeyParams = EcKeyParams | OctKeyParams;
+type KeyObject = KeyParams & {
+  kty: KeyType;
+};
 
-export type KeyObject = EcKeyObject | OctKeyObject;
-
-export class Key {
+declare class Key {
   type: KeyType;
   params: KeyParams;
 
   constructor(type: KeyType, params: KeyParams);
   static decode(buf: CborKey): Key;
-  static generate(type: KeyType, param: string | number): Promise<Key>;
-  encrypt(key: Key, headers: RawHeaders, opts?: EncryptionOptions): Promise<this>;
+  static generate(type: KeyType, param: 'secp256k1' | 128 | 256 | 512): Promise<Key>;
+  encrypt(key: Key, headers: RawHeaders, opts?: EncryptionOptions): Promise<Recipient>;
   toBuffer(): CborKey;
   toObject(): KeyObject;
   toPublic(): Key;
 }
 
-export interface RecipientParams {
+type KeyTuple = [
+  key: Key,
+  headers: RawHeaders
+]
+
+type KeyList = Key[] | KeyTuple[]
+
+interface RecipientParams {
   header?: RawHeaders;
   key?: Key;
 }
 
-export type RecipientTuple = [
+type RecipientTuple = [
   header: Header,
   key?: Key,
 ]
 
-export declare class Recipient {
+declare class Recipient {
   header: RawHeaders;
   key?: Key;
 
@@ -139,17 +138,17 @@ export declare class Recipient {
   toArray(): RecipientTuple;
 }
 
-export interface SignatureParams {
+interface SignatureParams {
   header?: RawHeaders;
   signature?: Buffer;
 }
 
-export type SignatureTuple = [
+type SignatureTuple = [
   header: RawHeaders,
   signature: Buffer,
 ]
 
-export class Signature {
+declare class Signature {
   header: Header;
   signature: Buffer;
 
@@ -160,11 +159,19 @@ export class Signature {
   toArray(): SignatureTuple;
 }
 
-export namespace util {
+declare namespace util {
   function fromBsvPubKey(pubKey: BsvPubKey): Key;
   function fromBsvPrivKey(privKey: BsvPrivKey): Key;
   function toBsvPubKey(key: Key): BsvPubKey;
   function toBsvPrivKey(key: Key): BsvPrivKey;
 }
 
+export {
+  Envelope,
+  Header,
+  Key,
+  Recipient,
+  Signature,
+  util
+};
 export const version: string;

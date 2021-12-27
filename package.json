@@ -15,13 +15,13 @@
   "repository": "https://github.com/libitx/univrse-js",
   "main": "dist/univrse.cjs.js",
   "browser": "dist/univrse.js",
-  "module": "src/index.esm.js",
+  "module": "dist/index.esm.js",
   "unpkg": "dist/univrse.min.js",
-  "types": "univrse.d.ts",
+  "types": "src/index.d.ts",
   "scripts": {
     "build": "rimraf dist && rollup -c rollup.config.js",
     "docs": "rimraf docs && jsdoc -c ./jsdoc.config.js",
-    "test": "mocha \"test/**/*.test.js\" --require esm"
+    "test": "mocha \"test/**/*.test.js\" --require esm && tsd"
   },
   "dependencies": {
     "base64url": "^3.0",
@@ -45,7 +45,8 @@
     "rollup": "^2.44",
     "rollup-plugin-banner": "^0.2",
     "rollup-plugin-node-polyfills": "^0.2",
-    "rollup-plugin-terser": "^7.0"
+    "rollup-plugin-terser": "^7.0",
+    "tsd": "^0.19.0"
   },
   "peerDependencies": {
     "bsv": "^2.0"
