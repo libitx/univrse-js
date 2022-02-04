@@ -134,9 +134,9 @@ console.log(env1.payload)
 // Encrypt and decrypt data for multiple recipients using multiple algorithms
 const env2 = Envelope.wrap('Hello world!', { proto: 'univrse.demo' })
 await env2.encrypt([
-  [appSecret, { alg: 'A256GCM' }],
-  [bobPubKey, { alg: 'ECDH-ES+A128GCM', kid: 'bob' }],
-  [bobPubKey, { alg: 'ECIES-BIE1', kid: 'charlie' }]
+  [appSecret,     { alg: 'A256GCM' }],
+  [bobPubKey,     { alg: 'ECDH-ES+A128GCM', kid: 'bob' }],
+  [charliePubKey, { alg: 'ECIES-BIE1', kid: 'charlie' }]
 ])
 
 const bobEnv = Envelope.fromBuffer(env2.toBuffer())
