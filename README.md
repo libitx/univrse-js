@@ -89,7 +89,7 @@ import { Envelope, Key } from 'univrse'
 
 // Generate keys
 const aliceKey = await Key.generate('ec', 'secp256k1')
-const alicePubKey = aliceKey.toPublic()
+const alicePub = aliceKey.toPublic()
 const appSecret = await Key.generate('oct', 256)
 
 // Sign and verify using a single key
